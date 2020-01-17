@@ -62,3 +62,13 @@ a:active {
 .section p {
     text-align: justify;
 }
+
+@media (max-width: 800px) {
+    h2,
+    h3 {
+        text-align: center;
+    }
+    .links {
+        justify-content: center;
+    }
+}
