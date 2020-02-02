@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Faux LED Screen Experiments</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <style>
+      figure canvas {
+        margin:16px 16px;
+      }
+    </style>
+  </head>
+  <body onload="init()">
+    <h1>Faux LED Screen Experiments</h1>
+    <p>I started messing around with this stuff in <a href="https://processing.org">Processing</a>, but after some fiddling around trying to record good GIFs, I realized I could just do this stuff with canvases. Enjoy!</p>
+    <figure class="flexImgs">
+      <canvas width="256" height="256" id="screen0"></canvas>
+      <canvas width="256" height="256" id="screen1"></canvas>
+      <canvas width="256" height="256" id="screen2"></canvas>
+      <canvas width="256" height="256" id="screen3"></canvas>
+    </figure>
+    <hr>
+    <p class="back"><a href="../index.html">Back to Blog Index</a></p>
+    <script src="led.js"></script>
+    <script>
+      var screens;
+      var frame;
+      var delay;
+      function init() {
+        screens = [];
+        frame = 0;
+        delay = 5;
+        var functions = [];
+        functions[0] = function(x, y, f) {return color(0, ((x + y + f%16) * 16)%256, ((x + y - f%16) * 16)%256)};
+        functions[1] = function(x, y, f) {return color(((x + 16 - f%16) * 16)%256, 0, ((x + f%16) * 16)%256)};
+        functions[2] = function(x, y, f) {return color((Math.min(x - f%16 + 16, y - f%16 + 16) * 16)%256, (Math.max(x - f%16 + 16, y - f%16 + 16) * 16)%256, (Math.max(x + f, y + f) * 16)%256)};
+        functions[3] = function(x, y, f) {
+          return color(256 - Math.abs(Math.sin((x + f)/10) * 256), 256 - Math.abs(Math.sin((y + f)/10) * 256), 256 - Math.abs(Math.sin((y + x + f)/8) * 256));
+        }
+        console.log(functions[0]);
+        for (var i=0; i<functions.length; i++) {
+          screens[i] = new LEDScreen(document.getElementById("screen" + i), 32, functions[i]);
+        }
+        render();
+      }
+
+      function render() {
+        if (frame%delay == 0) {
+          for (var i=0; i<screens.length; i++) {
+            screens[i].render();
+          }
+        }
+        frame++;
+        requestAnimationFrame(render);
+      }
+    </script>
+  </body>
+</html>

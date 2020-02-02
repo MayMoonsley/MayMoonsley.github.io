@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Visual Markov Chains</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+  </head>
+  <body>
+    <h1>Visual Markov Chains</h1>
+    <p>I've been experimenting with <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov chains</a> lately. They're pretty good for generating text (I've implemented that sort of thing a couple times) and generally fun to play around with.</p>
+    <p>I had an idea at school for how to generate images with Markov chains. Images are essentially lists of colors. Each color (ideally for our purposes, anyway) shows up multiple times in the list, and is followed by many other colors. So what happens if I construct a Markov chain based on the connection of these colors and let the computer just run through the chain until it's given me enough pixels to make an image?</p>
+    <p>That's what I did. (Well, that's what I wrote some code to do.) <a href="VisualMarkovChains.pde">Here's the Processing  code</a> I used to generate the below images. Feel free to generate some images with that code if you want and use them for whatever. Drop me a line if you do - I'd love to see what people can do with it.</p>
+    <figure class="flexImgs">
+      <img src="../../imgs/geo.png">
+      <figcaption>Source image.</figcaption>
+    </figure>
+    <figure class="flexImgs">
+      <image src="../../imgs/generate0.png"></image>
+      <image src="../../imgs/dripGen0.png"></image>
+      <image src="../../imgs/radGen0.png"></image>
+      <figcaption>Images generated with the visual Markov chain.</figcaption>
+    </figure>
+    <hr>
+    <p class="back"><a href="../index.html">Back to Blog Index</a></p>
+  </body>
+</html>

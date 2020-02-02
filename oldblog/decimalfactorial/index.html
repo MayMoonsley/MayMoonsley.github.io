@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Factorials With Decimals</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <script>
+      function init() {
+        document.getElementById("N").onchange = calculate;
+        document.getElementById("s").onchange = calculate;
+      }
+      //math function
+      function stepfactorial(N, s) {
+        N = parseFloat(N);
+        s = parseFloat(s);
+        if (typeof N != "number" || typeof s != "number" || N <= 0 || s <= 0) {
+          //must be positive
+          return "<span class='incorrect'>N and s must both be positive.</span>";
+        }
+        let mult = N - s;
+        while (mult > 1) {
+          N *= mult;
+          mult -= s;
+        }
+        return N;
+      }
+      //actually output
+      function calculate() {
+        document.getElementById("output").innerHTML = "Calculating..."
+        document.getElementById("output").innerHTML = stepfactorial(document.getElementById("N").value, document.getElementById("s").value)
+      }
+    </script>
+    <style>
+      .incorrect {
+        color:#F66;
+        text-decoration:underline;
+      }
+    </style>
+  </head>
+  <body onload="init()">
+    <h1>Factorials With Decimals</h1>
+    <p>Recently in Math class I started wondering what would happen if factorials decreased by decimal values instead of by one. So I decided to make a handy-dandy decimal stepping factorial calculator.</p>
+    <h2>Background On Factorials</h2>
+    <p>To find the factorial of any positive integer N, multiply it by each integer less than N and greater than zero.</p>
+    <figure>
+      <p>Example: 5! = 5 &times; 4 &times; 3 &times; 2 &times; 1 = 120</p>
+      <p>More generally: N! = N &times; (N - 1) &times; (N - 2) &times; (N - 3)... &times; 1</p>
+    </figure>
+    <h2>Stepping By Decimals</h2>
+    <p>Let's define a new operation we'll call the step factorial. For starting number N and stepping number s:</p>
+    <figure>
+      <p>N!<sub>s</sub> = N x (N - s) x (N - 2s) x (N - 3s)... x 1</p>
+    </figure>
+    <h2>Calculator</h2>
+    <div id="calculator" class="center">
+      <input type="number" min="0" id="N" value="5">
+      <input type="number" min="0" id="s" value="1">
+      <p class="center">Output: <span id="output">120</span></p>
+    </div>
+    <h2>Conclusion</h2>
+    <p>Is this useful? Honestly, probably not. I wouldn't be surprised if somebody has done this before. Still, it was a fun little exercise. It's interesting how small changes in s can cause such dramatic shifts in results &mdash; play around and see what happens!</p>
+    <hr>
+    <p class="back"><a href="../index.html">Back to Blog Index</a></p>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The Trendiest Implementation of the Threshold Filter Ever</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <style>
+      .pix p {
+        margin:0px auto;
+        padding:0px auto;
+        text-indent:0px;
+        text-align:center;
+      }
+      .pix {
+        background:#666;
+        margin:0px 150px;
+        padding:15px 15px;
+      }
+    </style>
+    <script>
+      function display(arr) { //takes boolean array, spits it out onto the page
+        document.getElementById("finalImage").innerHTML = "";
+        for (var i=0; i<arr.length; i++) { //rows
+          var p = document.createElement("p");
+          for (var j=0; j<arr[i].length; j++) { //pixels
+            if (arr[i][j]) {
+              p.innerHTML += "&#11036;";
+            } else {
+              p.innerHTML += "&#11035;";
+            }
+          }
+          document.getElementById("finalImage").appendChild(p);
+        }
+      }
+
+      function readAndConvert() {
+        var file = document.getElementById("fileIn").files[0];
+        var reader = new FileReader();
+        var img = document.createElement("img");
+        reader.onload = (function(aImg) { return function(e) { img.src = e.target.result; img.onload = function() {ripData(this)} }; })(img);
+        reader.readAsDataURL(file);
+      }
+
+      function ripData(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var context = canvas.getContext("2d");
+        context.drawImage(img, 0, 0);
+        var data = context.getImageData(0,0,canvas.width,canvas.height);
+        var width = img.width;
+        var height = img.height;
+        var arr = [];
+        for (var row=0; row<height; row++) {
+          arr.push([]);
+        }
+        for (var row=0; row<arr.length; row++) {
+          for (var col=0; col<width; col++) {
+            var x = col;
+            var y = row;
+
+            var index = x + y * img.width;
+
+            index *= 4;
+
+            var brightness = (data.data[index] + data.data[index + 1] + data.data[index + 2])/3;
+            console.log(brightness);
+
+            if (brightness > 180) {
+              arr[row].push(true);
+            } else {
+              arr[row].push(false);
+            }
+
+          }
+        }
+        display(arr);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>The Trendiest Implementation of the Threshold Filter Ever</h1>
+    <p>As a hemi-trendy semi-teenager, there are a couple things I know:</p>
+    <ol>
+      <li><a href="https://en.wikipedia.org/wiki/The_Emoji_Movie">Teens love emoji.</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Game_Boy">Teens love black and white pixellated images.</a></li>
+      <li><a href="http://maycod.es">Teens love weird JavaScript stuff.</a></li>
+    </ol>
+    <p>So, the obvious intersection: an emoji-based implementation of <a href="https://en.wikipedia.org/wiki/Thresholding_(image_processing)">Thresholding</a>. Of course, insert the standard "As-Is" warranty stuff here - I make no claims about the quality of this implementation, nor do I take any responsibility for what happens if you put stuff that's not an image into this. (Many thanks to <a href="https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications">the Mozilla Developer Network's tutorial</a> on this sort of thing.)</p>
+    <p>Image: <input type="file" id="fileIn"> <button type="button" onclick="readAndConvert()">Go!</button></p>
+    <div class="pix" id="finalImage">
+    </div>
+    <hr>
+    <p class="back"><a href="../index.html">Back to Blog Index</a></p>
+  </body>
+</html>

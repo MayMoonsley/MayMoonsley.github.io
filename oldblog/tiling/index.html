@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tiling</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <style>
+      div.bgShowcase {
+        width:160px;
+        height:160px;
+        animation:linear infinite 2s bg-loop;
+        display:inline-block;
+        border-radius:16px;
+        margin:16px 16px;
+      }
+
+      @keyframes bg-loop {
+        0% {
+          background-position:0px 0px;
+        }
+        100% {
+          background-position:64px 64px;
+        }
+      }
+
+      #hearts1 {
+        background-image:url(../../imgs/hearts1.png);
+      }
+
+      #waves {
+        background-image:url(../../imgs/waves.png);
+      }
+
+      #bubbles {
+        background-image:url(../../imgs/bubbles.png);
+      }
+
+      #patchwork {
+        background-image:url(../../imgs/patchwork.png);
+      }
+
+      #squares {
+        background-image:url(../../imgs/squares.png);
+      }
+
+      #hearts2 {
+        background-image:url(../../imgs/hearts2.png);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tiling Patterns</h1>
+    <p>I needed some tiling patterns for a project I was working on. Having my priorities in order, I spent a night or so making a little program (read: Processing sketch) to help me draw such things. It's not super great for precision work, but it is super great at creating the world's tackiest patterns. Behold!</p>
+    <div class="flexImgs">
+      <div class="bgShowcase" id="hearts1"></div>
+      <div class="bgShowcase" id="waves"></div>
+      <div class="bgShowcase" id="bubbles"></div>
+      <div class="bgShowcase" id="patchwork"></div>
+      <div class="bgShowcase" id="squares"></div>
+      <div class="bgShowcase" id="hearts2"></div>
+    </div>
+    <p>If you want to mess around with my code, <a href="Tiling_Art.pde">go right ahead</a>. (You'll need <a href="https://processing.org/">Processing</a> to run this, though.) Scroll to zoom in and out, left click to draw, right click to fill, D to do a dithering fill. Up and Down brighten and darken, left and right select hue, and 1 and 2 affect saturation. (Yes, it's a pretty bad interface, but I didn't want to make a color picker.) B toggles the image borders, C toggles the little cursor dot, S saves the image, and N creates a new image. (All images have to be 64 by 64 pixels, but that's easily changeable in the source code.)</p>
+    <p>Happy tiling!</p>
+    <hr>
+    <p class="back"><a href="../index.html">Back to Blog Index</a></p>
+  </body>
+</html>

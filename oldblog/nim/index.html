@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The Game of Nim</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <style>
+      .nimpile {
+        font-weight:bold;
+        font-size:48px;
+        text-indent:0px;
+        border:1px dotted #CCC;
+        padding:5px;
+        text-align:center;
+        display:inline-flex;
+        align-self:center;
+        margin:5px 5px;
+        width:auto;
+      }
+      .erased {
+        color:#F00;
+        text-decoration:line-through;
+      }
+      #game {
+        display:inline-flex;
+        justify-content:center;
+        margin-left:auto;
+        margin-right:auto;
+        max-width:75%;
+        flex-wrap:wrap;
+        border:1px dotted #CCC;
+        padding:5px 5px;
+        position:relative;
+      }
+      #quitButton {
+        background:#C33;
+        color:#000;
+        width:32px;
+        height:32px;
+        border:inherit;
+        border-top:none;
+        border-right:none;
+        position:absolute;
+        top:0px;
+        right:0px;
+        font-size:24px;
+      }
+
+      #quitButton:hover {
+        background:#C00;
+        color:#000;
+      }
+
+      #quitButton:active {
+        background:#600;
+      }
+    </style>
+  </head>
+  <body onload="init()">
+    <h1>The Game of Nim</h1>
+    <p>Nim is one of those stock math games you see everywhere, even if you don't recognize it. I gotta do a presentation on <a href="http://www.jstor.org/stable/2688757">a scholarly article</a> for GHP, so my partner and I picked one on Nim - and, since finding a specific variant of Nim online is a major pain, I decided to implement it in JavaScript. Here it is!</p>
+    <h2>Rules</h2>
+    <ul>
+      <li>You may remove any amount of counters from any single pile on your turn.</li>
+      <li>You win by removing the last counter.</li>
+      <li>This version of Nim, like the version described in the paper, only supports two players.</li>
+    </ul>
+    <h2 id="turn"></h2>
+    <div id="game">
+    </div>
+    <div id="controls">
+      <p>Piles: <input id="piles" type="text" value="1,2,3,4,5"><button type="button" id="go" onclick="startGame(false)">Go!</button><button type="button" id="gorand" onclick="startGame(true)">Go! (With Random Piles)</button></p>
+    </div>
+    <hr>
+    <p class="back"><a href="../index.html">Back to Blog Index</a></p>
+    <script>
+      var board;
+      var turn;
+      var quitButton;
+
+      function init() {
+        board = [];
+        document.getElementById("game").style.display = "none";
+        document.getElementById("turn").style.display = "none";
+        quitButton = document.createElement("button");
+        quitButton.type = "button";
+        quitButton.id = "quitButton";
+        quitButton.onclick = function() {
+          endGame();
+        }
+        quitButton.innerHTML = "X";
+        displayBoard();
+      }
+
+      function startGame(rand) {
+        board = [];
+        if (rand) {
+          var piles = Math.ceil(Math.random() * 5 + 2);
+          for (var i=0; i<piles; i++) {
+            board.push(Math.ceil(Math.random() * 5))
+          }
+        } else {
+          var splat = document.getElementById("piles").value.split(",");
+          for (var i=0; i<splat.length; i++) {
+            if (!isNaN(parseInt(splat[i]))) {
+              board.push(parseInt(splat[i]));
+            }
+          }
+        }
+        turn = true;
+        document.getElementById("turn").style.display = "block";
+        displayBoard();
+      }
+
+      function endGame() {
+        document.getElementById("turn").style.display = "none";
+        document.getElementById("game").style.display = "none";
+        document.getElementById("controls").style.display = "inline";
+      }
+
+      function hoverGraphics(id) {
+        var splat = id.split("_");
+        var pile = parseInt(splat[1]);
+        var start = parseInt(splat[3])
+        for (var i=start; i<board[pile]; i++) {
+          document.getElementById("pile_" + pile + "_span_" + i).className = "erased";
+        }
+      }
+
+      function unhoverGraphics(id) {
+        var splat = id.split("_");
+        var pile = parseInt(splat[1]);
+        var start = parseInt(splat[3]);
+        for (var i=start; i<board[pile]; i++) {
+          document.getElementById("pile_" + pile + "_span_" + i).className = "";
+        }
+      }
+
+      function remove(id) {
+        var splat = id.split("_");
+        var pile = parseInt(splat[1]);
+        var start = parseInt(splat[3]);
+        board[pile] = start;
+        turn = !turn;
+        displayBoard();
+      }
+
+      function displayBoard() {
+        document.getElementById("game").innerHTML = "";
+        var rowsDisplayed = 0;
+        for (var i=0; i<board.length; i++) {
+          if (board[i] > 0) {
+            rowsDisplayed++;
+            var p = document.createElement("p");
+            p.className = "nimpile";
+            p.id = "pile_" + i;
+            for (var j=0; j<board[i]; j++) {
+              var span = document.createElement("span");
+              span.innerHTML = "&curren;";
+              span.id = "pile_" + i + "_span_" + j;
+              span.onmouseover = function() {
+                hoverGraphics(this.id);
+              }
+              span.onmouseout = function() {
+                unhoverGraphics(this.id);
+              }
+              span.onclick = function() {
+                remove(this.id);
+              }
+              p.appendChild(span);
+            }
+            document.getElementById("game").appendChild(p);
+          }
+        }
+        var h2 = document.createElement("h2");
+        if (rowsDisplayed == 0) {
+          document.getElementById("controls").style.display = "inline";
+          if (turn) {
+            h2.innerHTML = "Player Two Wins!";
+          } else {
+            h2.innerHTML = "Player One Wins!";
+          }
+        } else {
+          document.getElementById("controls").style.display = "none";
+          document.getElementById("game").style.display = "flex";
+          if (turn) {
+            h2.innerHTML = "Player One's Turn";
+          } else {
+            h2.innerHTML = "Player Two's Turn";
+          }
+        }
+        document.getElementById("game").appendChild(quitButton);
+        document.getElementById("turn").innerHTML = h2.innerHTML;
+        //document.getElementById("game").appendChild(h2);
+      }
+    </script>
+  </body>
+</html>
